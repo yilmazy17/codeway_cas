@@ -12,7 +12,7 @@ class ShowedUsersController extends IShowedUsersController {
         var user = User(
             username: element['username'],
             profilePhotoURL: element['photoURL'],
-            stroiesList: element['storyURLList']);
+            storiesList: element['storyURLList']);
         await precacheImage(NetworkImage(user.profilePhotoURL!),
             context); // to load user profile photo
         activeUsers.add(user);

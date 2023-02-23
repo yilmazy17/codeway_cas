@@ -56,21 +56,24 @@ class _MainPageState extends State<MainPage> {
         ),
         body: Column(
           children: [
-            Container(
-              padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-              margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
-              height: 80,
-              child: ListView.builder(
-                itemCount: _showedUsersController.activeUsers.length,
-                scrollDirection: Axis.horizontal,
-                physics: AlwaysScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  User currentItem = _showedUsersController.activeUsers[index];
-                  return StoryUserAnimatedContainer(
-                    user: currentItem,
-                    activeIndex: index,
-                  );
-                },
+            Obx(
+              () => Container(
+                padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                margin: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                height: 80,
+                child: ListView.builder(
+                  itemCount: _showedUsersController.activeUsers.length,
+                  scrollDirection: Axis.horizontal,
+                  physics: AlwaysScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    User currentItem =
+                        _showedUsersController.activeUsers[index];
+                    return StoryUserAnimatedContainer(
+                      user: currentItem,
+                      activeIndex: index,
+                    );
+                  },
+                ),
               ),
             ),
           ],

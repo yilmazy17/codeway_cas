@@ -3,6 +3,6 @@ import 'package:get/get.dart';
 abstract class IUser extends GetxController {
   String? username;
   String? profilePhotoURL;
-  List<dynamic> stroiesList = [];
-  var isUserWatchAllStories = false.obs;
+  List<dynamic> storiesList = [];
+  var isAllStoriesWathed = false.obs;
 }

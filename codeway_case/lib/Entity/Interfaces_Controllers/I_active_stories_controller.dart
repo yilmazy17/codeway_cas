@@ -8,7 +8,7 @@ abstract class IActiveStoriesController extends GetxController {
       CarouselSliderController();
   bool isStoryWatching = false;
   bool isFirstItemLoaded = false;
+  List<dynamic> storyInitPipeline = [];
   bool isUserTapped = false;
   var progressPercentage = 0.0.obs;
-  var previousStoryIndex = (-1).obs;
 }

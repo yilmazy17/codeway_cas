@@ -1,6 +1,7 @@
 // ignore_for_file: unrelated_type_equality_checks, unused_local_variable
 
 import 'package:codeway_case/Business/Classes/story.dart';
+import 'package:codeway_case/Business/Classes/users.dart';
 import 'package:codeway_case/Business/Controllers/active_stories_controller.dart';
 import 'package:codeway_case/Business/Controllers/showed_users_controller.dart';
 import 'package:codeway_case/Business/Controllers/stroy_material_controller.dart';
@@ -38,7 +39,6 @@ class _MyWidgetState extends State<StoryWatchPage> {
   _onTapUpFunc(details) async {
     _activeStoriesController.progressPercentage.value = 0.0;
     _activeStoriesController.isUserTapped = false;
-
     final double screenWidth = Get.width / 2;
     final double dx = details.globalPosition.dx;
     UserStoriesController userStories = _activeStoriesController
@@ -74,11 +74,7 @@ class _MyWidgetState extends State<StoryWatchPage> {
           Story story =
               userStories.stories[userStories.activeUserStoryIndex.value];
           userStories.activeUserStoryIndex.value = 0;
-          _activeStoriesController.previousStoryIndex.value =
-              _activeStoriesController.activeStoryIndex.value;
           _activeStoriesController.activeStoryIndex++;
-          _activeStoriesController.setActiveStories(
-              _activeStoriesController.activeStoryIndex.value);
           userStories = _activeStoriesController
               .activeStories[_activeStoriesController.activeStoryIndex.value];
           story = userStories.stories[userStories.activeUserStoryIndex.value];
@@ -90,6 +86,13 @@ class _MyWidgetState extends State<StoryWatchPage> {
           await _controller!.seekTo(const Duration(seconds: 0));
         }
         userStories.activeUserStoryIndex.value++;
+        if (userStories.activeUserStoryIndex.value ==
+            userStories.stories.length - 1) {
+          ShowedUsersController showedUsersController = Get.find();
+          User user = showedUsersController
+              .activeUsers[_activeStoriesController.activeStoryIndex.value];
+          user.setAllwatchedValue();
+        }
       }
     } else {
       if (isUserStoryGroupOnStartPosition) {
@@ -100,12 +103,11 @@ class _MyWidgetState extends State<StoryWatchPage> {
             await _controller!.seekTo(const Duration(seconds: 0));
           }
           _activeStoriesController.activeStoryIndex--;
-          _activeStoriesController.setActiveStories(
-              _activeStoriesController.activeStoryIndex.value);
           UserStoriesController userStories = _activeStoriesController
               .activeStories[_activeStoriesController.activeStoryIndex.value];
           Story story =
               userStories.stories[userStories.activeUserStoryIndex.value];
+
           widget.controller.previousPage();
         }
       } else {
@@ -125,55 +127,39 @@ class _MyWidgetState extends State<StoryWatchPage> {
     }
     return WillPopScope(
       child: GestureDetector(
-          onLongPressEnd: (details) {
-            _activeStoriesController.isUserTapped = false;
+        behavior: HitTestBehavior.translucent,
+        onLongPressEnd: (details) {
+          _activeStoriesController.isUserTapped = false;
+          if (widget.story.type == StoryEnum.video) {
+            _controller!.play();
+          }
+        },
+        onTapUp: _onTapUpFunc,
+        onTapDown: (details) {
+          if (this.mounted) {
+            _activeStoriesController.isUserTapped = true;
             if (widget.story.type == StoryEnum.video) {
-              _controller!.play();
+              setState(() {
+                _controller!.value.isPlaying
+                    ? _controller!.pause()
+                    : _controller!.play();
+              });
             }
-          },
-          onTapUp: _onTapUpFunc,
-          onTapDown: (details) {
-            if (this.mounted) {
-              _activeStoriesController.isUserTapped = true;
-              if (widget.story.type == StoryEnum.video) {
-                setState(() {
-                  _controller!.value.isPlaying
-                      ? _controller!.pause()
-                      : _controller!.play();
-                });
-              }
-            }
-          },
-          child: (widget.story.type == StoryEnum.video)
-              ? Center(
-                  child: _controller!.value.isInitialized
-                      ? AspectRatio(
-                          aspectRatio: _controller!.value.aspectRatio,
-                          child: Stack(
-                            children: [
-                              VideoPlayer(_controller!),
-                              // Obx(
-                              //   () => Visibility(
-                              //     visible: !_storyMaterialController
-                              //         .isProgressIndicatorEnable.value,
-                              //     child: Center(
-                              //       child: Transform.scale(
-                              //           scale: 1.5,
-                              //           child: const CircularProgressIndicator(
-                              //             strokeWidth: 2,
-                              //             color: Colors.grey,
-                              //           )),
-                              //     ),
-                              //   ),
-                              // ),
-                            ],
-                          ))
-                      : Container(),
-                )
-              : AspectRatio(
-                  aspectRatio: 16 / 9,
-                  child: Image.network(widget.story.contentURL!),
-                )),
+          }
+        },
+        child: (widget.story.type == StoryEnum.video)
+            ? Center(
+                child: _controller!.value.isInitialized
+                    ? AspectRatio(
+                        aspectRatio: _controller!.value.aspectRatio,
+                        child: VideoPlayer(_controller!))
+                    : Container(),
+              )
+            : AspectRatio(
+                aspectRatio: 16 / 9,
+                child: Image.network(widget.story.contentURL!),
+              ),
+      ),
       onWillPop: () async => false,
     );
   }
