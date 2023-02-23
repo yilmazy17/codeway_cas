@@ -38,29 +38,53 @@ class _StoryPageState extends State<StoryPage> {
             height: Get.height * 0.8,
             child: CarouselSlider.builder(
                 onSlideEnd: () {
-                  _activeStoriesController.setActiveStories(sliderIndex);
+                  try {
+                    _activeStoriesController.setActiveStories(sliderIndex);
+                  } catch (e) {
+                    print(e.toString());
+                    _activeStoriesController.setInitialPosition();
+                    Get.back();
+                    Get.rawSnackbar(
+                      snackPosition: SnackPosition.TOP,
+                      title: 'Error',
+                      message: e.toString(),
+                      backgroundColor: Colors.red,
+                    );
+                  }
                 },
                 onSlideChanged: (value) async {
-                  sliderIndex = value;
-                  _activeStoriesController.progressPercentage.value = 0;
-                  UserStoriesController userStories =
-                      _activeStoriesController.activeStories[
+                  try {
+                    sliderIndex = value;
+                    _activeStoriesController.progressPercentage.value = 0;
+                    UserStoriesController userStories =
+                        _activeStoriesController.activeStories[
+                            _activeStoriesController.activeStoryIndex.value];
+                    if (userStories.storyCount.value > 0) {
+                      Story story = userStories
+                          .stories[userStories.activeUserStoryIndex.value];
+                      if (story.type == StoryEnum.video) {
+                        story.itemController!.pause();
+                        story.itemController!.seekTo(Duration(seconds: 0));
+                      }
+
+                      _activeStoriesController.activeStoryIndex.value = value;
+                      userStories = _activeStoriesController.activeStories[
                           _activeStoriesController.activeStoryIndex.value];
-                  if (userStories.storyCount.value > 0) {
-                    Story story = userStories
-                        .stories[userStories.activeUserStoryIndex.value];
-                    if (story.type == StoryEnum.video) {
-                      story.itemController!.pause();
-                      story.itemController!.seekTo(Duration(seconds: 0));
-                    }
 
-                    _activeStoriesController.activeStoryIndex.value = value;
-                    userStories = _activeStoriesController.activeStories[
-                        _activeStoriesController.activeStoryIndex.value];
-
-                    if (story.type == StoryEnum.video) {
-                      story.itemController!.play();
+                      if (story.type == StoryEnum.video) {
+                        story.itemController!.play();
+                      }
                     }
+                  } catch (e) {
+                    print(e.toString());
+                    _activeStoriesController.setInitialPosition();
+                    Get.back();
+                    Get.rawSnackbar(
+                      snackPosition: SnackPosition.TOP,
+                      title: 'Error',
+                      message: e.toString(),
+                      backgroundColor: Colors.red,
+                    );
                   }
                 },
                 initialPage: _activeStoriesController.activeStoryIndex.value,

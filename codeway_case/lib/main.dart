@@ -1,6 +1,5 @@
 import 'package:codeway_case/Business/Controllers/active_stories_controller.dart';
 import 'package:codeway_case/Business/Controllers/showed_users_controller.dart';
-import 'package:codeway_case/Business/Controllers/stroy_material_controller.dart';
 import 'package:codeway_case/Business/Controllers/user_stories_controller.dart';
 import 'package:codeway_case/Views/main_page/mainPage.dart';
 import 'package:codeway_case/Views/splash_page/splash_page.dart';
@@ -17,7 +16,6 @@ void main() {
 initializeControllers() {
   Get.put(ShowedUsersController(), permanent: true);
   Get.put(ActiveStoriesController(), permanent: true);
-  Get.put(StoryMaterialController(), permanent: true);
 }
 
 class MyApp extends StatelessWidget {

@@ -87,6 +87,35 @@ class UsersAndVideoURLs {
               'https://images.unsplash.com/photo-1524648829700-99c448a9e88d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80'
         },
       ],
+    },
+    {
+      'username': 'user5',
+      'photoURL':
+          'https://thumbs.dreamstime.com/b/yellow-crash-test-dummy-yellow-crash-test-dummy-car-seat-116968697.jpg',
+      'storyURLList': [
+        {
+          'type': 'image',
+          'url':
+              'https://images.unsplash.com/photo-1605002619330-080580537d72?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80'
+        },
+        {
+          'type': 'image',
+          'url':
+              'https://images.unsplash.com/photo-1573680156791-0b85133632b4?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1285&q=80'
+        },
+      ],
+    },
+    {
+      'username': 'user6',
+      'photoURL':
+          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTkF17GkzaTA0PzQjgSusQHlkBbFiA7_vswEA&usqp=CAU',
+      'storyURLList': [
+        {
+          'type': 'video',
+          'url':
+              'https://media.istockphoto.com/id/1404043378/tr/video/happy-african-family-moving-into-a-modern-house-excited-children-running-into-their-new-big.mp4?s=mp4-640x640-is&k=20&c=hRYMyVQMXrVEc4J33LehCTdz_t5qE5-4QB__UXPi4p0='
+        }
+      ],
     }
   ];
 }

@@ -30,22 +30,28 @@ class UserStoriesController extends IUserStoriesController {
       }
     } catch (e) {
       print(e.toString());
+      throw e;
     }
   }
 
   Future initializeStories() async {
-    isStoryInitializeProcessStarted = true;
-    ShowedUsersController showedUsersController = Get.find();
-    if (!isUserStoriesInitialized.value) {
-      for (var element in stories) {
-        Story item = element;
-        if (item.type == StoryEnum.image) {
-          await precacheImage(NetworkImage(item.contentURL!),
-              showedUsersController.scaffoldKey!.currentContext!);
-        } else if (item.type == StoryEnum.video) {
-          await item.itemController!.initialize();
+    try {
+      isStoryInitializeProcessStarted = true;
+      ShowedUsersController showedUsersController = Get.find();
+      if (!isUserStoriesInitialized.value) {
+        for (var element in stories) {
+          Story item = element;
+          if (item.type == StoryEnum.image) {
+            await precacheImage(NetworkImage(item.contentURL!),
+                showedUsersController.scaffoldKey!.currentContext!);
+          } else if (item.type == StoryEnum.video) {
+            await item.itemController!.initialize();
+          }
         }
       }
+    } catch (e) {
+      print(e.toString());
+      throw e;
     }
   }
 }

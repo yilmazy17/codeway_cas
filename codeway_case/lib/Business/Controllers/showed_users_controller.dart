@@ -7,16 +7,26 @@ import 'package:get/get.dart';
 class ShowedUsersController extends IShowedUsersController {
   Future getShowedUsers(BuildContext context) async {
     // This part should be data access line it can be http rest or ProtoBuf etc..
-    for (var element in UsersAndVideoURLs.URL_List) {
-      if (element['storyURLList'].length > 0) {
-        var user = User(
-            username: element['username'],
-            profilePhotoURL: element['photoURL'],
-            storiesList: element['storyURLList']);
-        await precacheImage(NetworkImage(user.profilePhotoURL!),
-            context); // to load user profile photo
-        activeUsers.add(user);
+    try {
+      for (var element in UsersAndVideoURLs.URL_List) {
+        if (element['storyURLList'].length > 0) {
+          var user = User(
+              username: element['username'],
+              profilePhotoURL: element['photoURL'],
+              storiesList: element['storyURLList']);
+          await precacheImage(NetworkImage(user.profilePhotoURL!),
+              context); // to load user profile photo
+          activeUsers.add(user);
+        }
       }
+    } catch (e) {
+      print(e.toString());
+      Get.rawSnackbar(
+        snackPosition: SnackPosition.TOP,
+        title: 'Error',
+        message: e.toString(),
+        backgroundColor: Colors.red,
+      );
     }
   }
 }
