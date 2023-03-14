@@ -1,20 +1,11 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_final_fields
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_final_fields, sized_box_for_whitespace
 
-import 'dart:async';
-
-import 'package:codeway_case/Business/Classes/story.dart';
-import 'package:codeway_case/Business/Classes/users.dart';
-import 'package:codeway_case/Business/Controllers/active_stories_controller.dart';
+import 'package:codeway_case/Business/Controllers/active_story_controller.dart';
 import 'package:codeway_case/Business/Controllers/showed_users_controller.dart';
-import 'package:codeway_case/Business/Controllers/user_stories_controller.dart';
-import 'package:codeway_case/Entity/Interfaces_Classes/I_story.dart';
-import 'package:codeway_case/Views/story_watch_page/storyWatchPage.dart';
 import 'package:codeway_case/Views/user_story_page/user_story_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_carousel_slider/carousel_slider.dart';
-import 'package:flutter_carousel_slider/carousel_slider_indicators.dart';
-import 'package:flutter_carousel_slider/carousel_slider_transforms.dart';
 
 class StoryPage extends StatefulWidget {
   const StoryPage({super.key});
@@ -25,7 +16,7 @@ class StoryPage extends StatefulWidget {
 
 class _StoryPageState extends State<StoryPage> {
   ShowedUsersController _showedUsersController = Get.find();
-  ActiveStoriesController _activeStoriesController = Get.find();
+  ActiveStoryController _activeStoryController = Get.find();
   int sliderIndex = 0;
   @override
   Widget build(BuildContext context) {
@@ -37,67 +28,18 @@ class _StoryPageState extends State<StoryPage> {
           Container(
             height: Get.height * 0.8,
             child: CarouselSlider.builder(
-                onSlideEnd: () {
-                  try {
-                    _activeStoriesController.setActiveStories(sliderIndex);
-                  } catch (e) {
-                    print(e.toString());
-                    _activeStoriesController.setInitialPosition();
-                    Get.back();
-                    Get.rawSnackbar(
-                      snackPosition: SnackPosition.TOP,
-                      title: 'Error',
-                      message: e.toString(),
-                      backgroundColor: Colors.red,
-                    );
-                  }
-                },
-                onSlideChanged: (value) async {
-                  try {
-                    sliderIndex = value;
-                    _activeStoriesController.progressPercentage.value = 0;
-                    UserStoriesController userStories =
-                        _activeStoriesController.activeStories[
-                            _activeStoriesController.activeStoryIndex.value];
-                    if (userStories.storyCount.value > 0) {
-                      Story story = userStories
-                          .stories[userStories.activeUserStoryIndex.value];
-                      if (story.type == StoryEnum.video) {
-                        story.itemController!.pause();
-                        story.itemController!.seekTo(Duration(seconds: 0));
-                      }
-
-                      _activeStoriesController.activeStoryIndex.value = value;
-                      userStories = _activeStoriesController.activeStories[
-                          _activeStoriesController.activeStoryIndex.value];
-
-                      if (story.type == StoryEnum.video) {
-                        story.itemController!.play();
-                      }
-                    }
-                  } catch (e) {
-                    print(e.toString());
-                    _activeStoriesController.setInitialPosition();
-                    Get.back();
-                    Get.rawSnackbar(
-                      snackPosition: SnackPosition.TOP,
-                      title: 'Error',
-                      message: e.toString(),
-                      backgroundColor: Colors.red,
-                    );
-                  }
-                },
-                initialPage: _activeStoriesController.activeStoryIndex.value,
+                onSlideEnd: _activeStoryController.sliderSlideEnded,
+                onSlideChanged: _activeStoryController.sliderSlideChanged,
+                initialPage: _activeStoryController.activeStoryIndex.value,
                 autoSliderTransitionTime: Duration(milliseconds: 400),
-                controller: _activeStoriesController.carouselSliderController,
+                controller: _activeStoryController.carouselSliderController,
                 slideTransform: CubeTransform(),
                 slideBuilder: (index) {
                   return UserStoryPage(
                       userIndex: index,
                       controller:
-                          _activeStoriesController.carouselSliderController,
-                      storyDetail:
-                          _activeStoriesController.activeStories[index]);
+                          _activeStoryController.carouselSliderController,
+                      storyDetail: _activeStoryController.activeStories[index]);
                 },
                 itemCount: _showedUsersController.activeUsers.length),
           ),

@@ -2,7 +2,7 @@ import 'package:codeway_case/Business/Classes/story.dart';
 import 'package:codeway_case/Business/Classes/users.dart';
 import 'package:get/get.dart';
 
-abstract class IUserStoriesController extends GetxController {
+abstract class IStoryGroupController extends GetxController {
   List<Story> stories = [];
 
   User? user;

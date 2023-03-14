@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ShowedUsersController extends IShowedUsersController {
+  // To manage user story list on the main page it is different from active story controller's list
   Future getShowedUsers(BuildContext context) async {
     // This part should be data access line it can be http rest or ProtoBuf etc..
     try {

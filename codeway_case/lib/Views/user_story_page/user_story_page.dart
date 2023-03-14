@@ -1,18 +1,12 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables
-
-import 'dart:async';
-
-import 'package:codeway_case/Business/Classes/story.dart';
-import 'package:codeway_case/Business/Controllers/active_stories_controller.dart';
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, avoid_unnecessary_containers, must_be_immutable, sized_box_for_whitespace, prefer_final_fields, unused_field
+import 'package:codeway_case/Business/Controllers/active_story_controller.dart';
 import 'package:codeway_case/Business/Controllers/showed_users_controller.dart';
-import 'package:codeway_case/Business/Controllers/user_stories_controller.dart';
-import 'package:codeway_case/Entity/Interfaces_Classes/I_story.dart';
+import 'package:codeway_case/Business/Controllers/story_group_controller.dart';
 import 'package:codeway_case/Views/story_watch_page/storyWatchPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_carousel_slider/carousel_slider.dart';
 import 'package:get/get.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
-import 'package:video_player/video_player.dart';
 
 class UserStoryPage extends StatefulWidget {
   UserStoryPage(
@@ -20,7 +14,7 @@ class UserStoryPage extends StatefulWidget {
       required this.storyDetail,
       required this.controller,
       required this.userIndex});
-  UserStoriesController storyDetail;
+  StoryGroupController storyDetail;
   CarouselSliderController controller;
   int userIndex;
   @override
@@ -28,7 +22,7 @@ class UserStoryPage extends StatefulWidget {
 }
 
 class _UserStoryPageState extends State<UserStoryPage> {
-  ActiveStoriesController _activeStoriesController = Get.find();
+  ActiveStoryController _activeStoryController = Get.find();
   ShowedUsersController _showedUsersController = Get.find();
 
   @override
@@ -74,7 +68,7 @@ class _UserStoryPageState extends State<UserStoryPage> {
                                   animation: true,
                                   animateFromLastPercent: true,
                                   restartAnimation: false,
-                                  percent: _activeStoriesController
+                                  percent: _activeStoryController
                                       .progressPercentage.value,
                                   backgroundColor: Colors.grey,
                                   progressColor: Colors.white,
@@ -137,21 +131,7 @@ class _UserStoryPageState extends State<UserStoryPage> {
                 ),
                 GestureDetector(
                   onTap: () async {
-                    UserStoriesController userStories = widget.storyDetail;
-                    if (userStories.isUserStoriesInitialized.value) {
-                      Story story = userStories
-                          .stories[userStories.activeUserStoryIndex.value];
-                      if (story.type == StoryEnum.video) {
-                        VideoPlayerController _controller =
-                            story.itemController!;
-                        await _controller.pause();
-                        await _controller.seekTo(const Duration(seconds: 0));
-                      }
-                    }
-
-                    // await _activeStoriesController.setInitialPosition();
-                    _activeStoriesController.isStoryWatching = false;
-                    Get.back();
+                    _activeStoryController.closeStory(widget.storyDetail);
                   },
                   child: Container(
                     margin: EdgeInsets.fromLTRB(0, 0, 10, 0),

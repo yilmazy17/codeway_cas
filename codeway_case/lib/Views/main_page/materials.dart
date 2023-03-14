@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:codeway_case/Business/Classes/story.dart';
 import 'package:codeway_case/Business/Classes/users.dart';
-import 'package:codeway_case/Business/Controllers/active_stories_controller.dart';
+import 'package:codeway_case/Business/Controllers/active_story_controller.dart';
 import 'package:codeway_case/Business/Controllers/showed_users_controller.dart';
-import 'package:codeway_case/Business/Controllers/user_stories_controller.dart';
+import 'package:codeway_case/Business/Controllers/story_group_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -25,8 +25,8 @@ class _StoryUserAnimatedStateContainer
   Color borderColor = Colors.red;
   bool isSelected = false;
   ShowedUsersController _showedUsersController = Get.find();
-  ActiveStoriesController _activeStoriesController = Get.find();
-  whenSelected() async {
+  ActiveStoryController _activeStoryController = Get.find();
+  selectionAnimationBuilder() async {
     isSelected = true;
     if (isSelected) {
       borderWidth = (borderWidth == 2) ? 5 : 2;
@@ -49,27 +49,22 @@ class _StoryUserAnimatedStateContainer
         timer.cancel();
       }
     });
-    _activeStoriesController.activeStoryIndex.value = widget.activeIndex;
-    await _activeStoriesController.setActiveStories(widget.activeIndex);
-    UserStoriesController userStories = _activeStoriesController
-        .activeStories[_activeStoriesController.activeStoryIndex.value];
-    Story story = userStories.stories[userStories.activeUserStoryIndex.value];
-    _activeStoriesController.isStoryWatching = true;
-    await _activeStoriesController.startTimer();
-    _activeStoriesController.progressPercentage.value = 0.0;
+  }
 
-    isSelected = false;
-
-    Get.toNamed('/storyPage');
+  selectStory() async {
+    if (!isSelected) {
+      selectionAnimationBuilder();
+      await _activeStoryController.selectStory(widget.activeIndex);
+      isSelected = false;
+      Get.toNamed('/storyPage');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        if (!isSelected) {
-          whenSelected();
-        }
+        selectStory();
       },
       child: Obx(
         () => AnimatedContainer(

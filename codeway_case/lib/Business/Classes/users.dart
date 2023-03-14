@@ -1,6 +1,6 @@
-import 'package:codeway_case/Business/Controllers/active_stories_controller.dart';
+import 'package:codeway_case/Business/Controllers/active_story_controller.dart';
 import 'package:codeway_case/Business/Controllers/showed_users_controller.dart';
-import 'package:codeway_case/Business/Controllers/user_stories_controller.dart';
+import 'package:codeway_case/Business/Controllers/story_group_controller.dart';
 import 'package:codeway_case/Entity/Interfaces_Classes/I_users.dart';
 import 'package:get/get.dart';
 

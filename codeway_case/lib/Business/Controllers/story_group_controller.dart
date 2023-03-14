@@ -1,14 +1,18 @@
+// ignore_for_file: use_rethrow_when_possible, avoid_print
+
 import 'package:codeway_case/Business/Classes/story.dart';
-import 'package:codeway_case/Business/Classes/users.dart';
 import 'package:codeway_case/Business/Controllers/showed_users_controller.dart';
 import 'package:codeway_case/Entity/Interfaces_Classes/I_story.dart';
-import 'package:codeway_case/Entity/Interfaces_Controllers/I_user_stories_controller.dart';
+import 'package:codeway_case/Entity/Interfaces_Controllers/I_story_group_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:get/state_manager.dart';
 import 'package:get/get.dart';
 import 'package:video_player/video_player.dart';
 
-class UserStoriesController extends IUserStoriesController {
+class StoryGroupController extends IStoryGroupController {
+  getActiveStory() {
+    return stories[activeUserStoryIndex.value];
+  }
+
   Future addStories({
     required List<dynamic> storyURLList,
   }) async {
