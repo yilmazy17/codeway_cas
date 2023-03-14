@@ -10,7 +10,6 @@ abstract class IActiveStoryController extends GetxController {
   bool isStoryWatching = false;
   bool isFirstItemLoaded = false;
   List<dynamic> storyInitPipeline = [];
-
   bool isUserTapped = false;
   var progressPercentage = 0.0.obs;
 }

@@ -288,6 +288,7 @@ class ActiveStoryController extends IActiveStoryController {
             await videoController!.pause();
             await videoController.seekTo(const Duration(seconds: 0));
           }
+
           storyGroup.activeUserStoryIndex.value++;
           if (storyGroup.activeUserStoryIndex.value ==
               storyGroup.stories.length - 1) {
@@ -306,7 +307,7 @@ class ActiveStoryController extends IActiveStoryController {
               await videoController.seekTo(const Duration(seconds: 0));
             }
             activeStoryIndex--;
-            sliderController.previousPage();
+            await sliderController.previousPage();
           }
         } else {
           if (widgetStory.type == StoryEnum.video) {
